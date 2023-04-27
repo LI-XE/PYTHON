@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+</head>
+<body>
+  <h1>This is home page.</h1>
+  <h3>My Flask Template</h3>
+<p>Phrase: {{ name }}</p>
+<p>Times: {{ num }}</p>
+
+
+      {# Using HTML comments (<!-- -->) will NOT comment out Jinja. Use this syntax to comment out  #}
+      {#
+        {% ... %} for Statements
+        {{ ... }} for Expressions to print to the template output
+      #}
+
+
+{% for x in range(0,num): %}
+    <p>{{ name }}</p>
+{% endfor %}
+      
+{% if phrase == "hello" %}
+  <p>The phrase says hello</p>
+{% endif %}
+
+
+</body>
+</html>
