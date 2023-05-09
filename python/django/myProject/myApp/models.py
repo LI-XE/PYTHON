@@ -1,3 +1,10 @@
 from django.db import models
 
-# Create your models here.
+class Shoe(models.Model):
+    brand = models.CharField(max_length= 45)
+    color = models.CharField(max_length= 17)
+    material = models.CharField(max_length= 17)
+    has_laces = models.BooleanField()
+    count = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
