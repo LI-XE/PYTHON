@@ -4,9 +4,33 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Create a Shoe</title>
 </head>
 <body>
-  <h1>home page</h1>
+  <h1>Let's get some shoes</h1>
+  <form action="/create" method="POST">
+    {% csrf_token %}
+    <label for="brand">Brand</label>
+    <input type="text" name="brand">
+
+    <label for="color">Color</label>
+    <input type="text" name="color">
+
+    <label for="material">Material</label>
+    <input type="text" name="material">
+
+    <label for="has_laces">Does it have laces?</label>
+    <input type="checkbox" name="has_laces" value=True>
+
+    <label for="count">Count</label>
+    <input type="number" name="count" >
+
+    <input type="submit" value="Make a Shoe">
+
+  </form>
+
+
+
+  
 </body>
 </html>

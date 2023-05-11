@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Show shoe info</title>
+</head>
+<body>
+  <h1>ALL THE SHOES</h1>
+  <a href="/">Create a shoe</a>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Brand</th>
+        <th>Color</th>
+        <th>Material</th>
+        <th>Laces?</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for shoe in all_shoes %}
+      <tr>
+        <td>{{shoe.id}}</td>
+        <td>{{shoe.brand}}</td>
+        <td>{{shoe.color}}</td>
+        <td>{{shoe.material}}</td>
+        {% if shoe.has_laces == True %}
+        <td>Yes</td>
+        {% else %}
+        <td>No</td>
+        {% endif %}
+        <td>{{shoe.count}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
