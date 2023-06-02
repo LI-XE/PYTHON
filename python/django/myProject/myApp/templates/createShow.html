@@ -22,7 +22,7 @@
               {% endfor %}
           </ul>
       {% endif %}
-    <form action="/shows/new" method="POST">
+    <form action="/shows/new" method="POST" onsubmit="return confirm ('Are you sure?')">
       {% csrf_token %}
       <div class="form-group">
         <label for="title">Title</label>

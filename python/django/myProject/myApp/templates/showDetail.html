@@ -12,20 +12,20 @@
 </head>
 <body class="container-fluid detail">
   {% block content %}
-  <div  class="container d-flex flex-column align-items-center px-3 pb-5">
+  <div  class="container d-flex flex-column align-items-center px-3 pb-5 ">
     <a href="/shows" class="text-right my-3  ml-auto">Go Back</a>
-    <h1 class="mb-3">SHOW TITLE</h1>
-    <ul>
-      <li><span>Title:</span>{{show.title}}</li>
-      <li><span>Network:</span>{{show.network}}</li>
-      <li><span>Release Date:</span>{{show.release_date}}</li>
-      <li><span>Descriptionv:</span>{{show.description}}</li>
+    <h1 class="mb-5 display-2">SHOW</h1>
+    <ul class="display-4">
+      <li><span class="m-5">Title:</span>{{show.title}}</li>
+      <li><span class="m-5">Network:</span>{{show.network}}</li>
+      <li><span class="m-5">Release Date:</span>{{show.release_date|date:"M d, Y"}}</li>
+      <li><span class="m-5">Descriptionv:</span>{{show.description}}</li>
       
     </ul>
-    <p>Last Updated: {{show.updated_at}}</p>
+    <p>Last Updated: {{show.updated_at|date:"M d, Y"}}</p>
     <div>
       {% if user.id == show.created_by_id %}
-      <a href="/shows/{{show.id}}/edit" class="btn btn-warning mr-3">Edit</a>
+      <a href="/shows/{{show.id}}/edit" class="btn btn-warning mr-5">Edit</a>
       <a href="/shows/{{show.id}}/delete" class="btn btn-danger text-dark">Delete</a>
       {% endif %}
     </div>

@@ -30,13 +30,13 @@
         <td>{{show.id}}</td>
         <td>{{show.title}}</td>
         <td>{{show.network}}</td>
-        <td>{{show.release_date}}</td>
+        <td>{{show.release_date|date:'M d, Y'}}</td>
         <td>{{show.description}}</td>
         <td>
           <a href="/shows/{{show.id}}" class="text-white">Show</a>
           {% if user.id == show.created_by_id %}
           <a href="/shows/{{show.id}}/edit" class="text-warning mx-2">Edit</a>
-          <a href="/shows/{{show.id}}/delete" class="text-danger">Delete</a>
+          <a href="/shows/{{show.id}}/delete" class="text-danger" type="submit" onclick="return confirm('Are you sure?')">Delete</a>
           {% endif %}
         </td>
       </tr>

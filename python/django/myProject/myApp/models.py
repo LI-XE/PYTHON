@@ -94,7 +94,7 @@ class Show(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
         User, related_name="shows_created", on_delete=models.CASCADE)
-    guests = models.ManyToManyField(User, related_name="shows")
+    likes = models.ManyToManyField(User, related_name="shows")
     objects = ShowManager()
 
     def __str__(self):  # usually only needed if using in admin

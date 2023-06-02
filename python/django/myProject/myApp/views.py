@@ -1,11 +1,9 @@
-from email.utils import format_datetime
+
 from django.shortcuts import render, redirect
 from .models import Shoe, Show, User
 from django.contrib import messages
 import bcrypt
 
-
-# Create your views here.
 
 def index(request):
     user = None if "user_id" not in request.session else User.objects.get(
@@ -45,7 +43,7 @@ def shows_page(request):
         "user": user
     }
     print(user)
-    print(context)
+    print(Show.objects.all().__dict__)
     return render(request, "shows.html", context)
 
 # create show
