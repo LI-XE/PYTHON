@@ -10,7 +10,6 @@
   <title>Create a Shoe</title>
 </head>
 <body>
-  <div>
   <div class="nav d-flex justify-content-end bg-info p-2">
     {% block nav %}
     {% if user %}
@@ -21,10 +20,8 @@
     {% endif %}
     {% endblock %}
     </div>
-    <div>
       {% block content %}
     {% endblock %}
-    </div>
   </div>
   <!-- <h1>Let's get some shoes</h1>
   <form action="/create" method="POST">
