@@ -14,3 +14,25 @@ body {
   height: 100vh;
   background-color: red;
 }
+
+a {
+  font-size: 1rem;
+  text-decoration: none;
+  outline: none;
+  color: black;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a:hover {
+  font-size: 1rem;
+  text-decoration: none;
+  color: tomato;
+}
+
+span {
+  font-weight: 700;
+}
+

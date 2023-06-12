@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, redirect
-from .models import  User
+from .models import User, Book, Review, Author
 from django.contrib import messages
 import bcrypt
 
@@ -49,31 +49,49 @@ def index(request):
 # # create show
 
 
-# def add_show_page(request):
-#     if "user_id" not in request.session:
-#         return redirect("/login")
+def add_book(request):
+    user = None if 'user_id' not in request.session else User.objects.get(
+        id=request.session['user_id'])
+    if not user:
+        return redirect("/login")
 
-#     user = User.objects.get(id=request.session['user_id'])
+    authors = Author.objects.all()
 
-#     context = {
-#         "user": user
-#     }
+    if request.method == "POST":
+        review_errors = Review.objects.validate(request.POST)
+        book_errors = Book.objects.validate(request.POST)
+        errors = list(review_errors.values()) + list(book_errors.values())
 
-#     if request.method == "POST":
-#         errors = Show.objects.validate(request.POST)
-#         if errors:
-#             for e in errors.values():
-#                 messages.error(request, e)
-#             return redirect("/shows/new")
+        if request.POST["author_dropdown"] == "-1":
+            if request.POST["author_name"] == "":
+                messages.error(
+                    request, "Please either choose an author from the dropdown or create a new one.")
+            else:
+                author_errors = Author.objects.validate(request.POST)
+                errors += list(author_errors.values())
 
-#         show = Show.objects.create(title=request.POST["title"], network=request.POST["network"],
-#                                    release_date=request.POST["release_date"], description=request.POST["description"], created_by=user)
+        if errors:
+            for e in errors:
+                messages.error(request, e)
+            return redirect("/books/add")
 
-#         messages.add_message(request, messages.SUCCESS,
-#                              "{show.title} has been added")
-#         return redirect(f"/shows/{show.id}")
-#     else:
-#         return render(request, "createShow.html", context)
+        if request.POST["author_dropdown"] == "-1":
+            author = Author.objects.create(name=request.POST["author_name"])
+        else:
+            author = Author.objects.get(id=request.POST["author_dropdown"])
+
+        book = Book.objects.create(
+            title=request.POST["title"])
+        review = Review.objects.create(
+            review=request.POST["review"], rating=int(request.POST["rating"]), reviewer=user, book=book)
+        book.authors.add(author)
+        messages.add_message(request, messages.SUCCESS,
+                             "{book.title} has been added")
+        print(book.__dict__)
+        # print(new_review)
+        return redirect(f"/books/{book.id}")
+    else:
+        return render(request, "addBook.html", context={"authors": Author.objects.all()})
 
 
 # # edit show
@@ -111,20 +129,36 @@ def index(request):
 #         return render(request, "updateShow.html", context={"show": show, "user": user})
 
 
-# # show detail
-# def show_detail(request, show_id):
-#     user = None if 'user_id' not in request.session else User.objects.get(
-#         id=request.session['user_id'])
+# book detail
+def book_detail(request, book_id):
+    user = None if 'user_id' not in request.session else User.objects.get(
+        id=request.session['user_id'])
 
-#     show = Show.objects.get(id=show_id)
+    this_book = Book.objects.get(id=book_id)
+    reviews = Review.objects.filter(book_id=this_book.id)
 
-#     print(show_id)
+    if request.method == "POST":
+        if not user:
+            messages.error(request, "Please log in first.")
 
-#     context = {
-#         "show": show,
-#         "user": user
-#     }
-#     return render(request, "showDetail.html", context)
+        errors = Review.objects.validate(request.POST)
+        if errors:
+            for e in errors.values():
+                messages.error(request, e)
+            return redirect(f"/books/{book_id}")
+
+        review = Review.objects.create(review=request.POST["review"], rating=int(
+            request.POST["rating"]), reviewer=user, book=this_book)
+        return redirect(f"/books/{book_id}/add/review")
+    else:
+        context = {
+            "book": this_book,
+            "user": user,
+            "reviews": reviews,
+            "count": len(reviews)
+        }
+
+        return render(request, "bookDetail.html", context)
 
 
 # # delete show
@@ -160,7 +194,7 @@ def register(request):
 
         request.session["user_id"] = user.id
 
-        return redirect("/shows")
+        return redirect("/books/add")
     else:
         return render(request, "register.html")
 
@@ -176,7 +210,7 @@ def login(request):
         else:
             logged_user = User.objects.filter(email=request.POST["email"])[0]
             request.session["user_id"] = logged_user.id
-            return redirect("/shows")
+            return redirect("/books/add")
 
     else:
         return render(request, "login.html")
@@ -184,5 +218,4 @@ def login(request):
 
 def logout(request):
     request.session.clear()
-    return redirect("/shows")
-
+    return redirect("/books")

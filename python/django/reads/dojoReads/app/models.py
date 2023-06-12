@@ -66,16 +66,31 @@ class BookManager(models.Manager):
         return errors
 
 
+class AuthorManager(models.Manager):
+    def validate(self, form):
+        errors = {}
+        if len(form["author_name"]) < 2:
+            errors["author_name"] = "Author name should be at least 2 characters"
+        author_in_db = Author.objects.filter(name=form["author_name"])
+        if len(author_in_db) >= 1:
+            errors["dulplicate"] = "Author already exists."
+        return errors
+
+
 class Book(models.Model):
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(
-        User, related_name="books", on_delete=models.CASCADE)
+    followers = models.ManyToManyField(User, related_name="followed_books")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = BookManager()
 
-    def __str__(self):  # usually only needed if using in admin
-        return "{} by {}".format(self.title, self.author)
+
+class Author(models.Model):
+    name = models.CharField(max_length=255)
+    books = models.ManyToManyField(Book, related_name="authors")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = AuthorManager()
 
 
 class ReviewManager(models.Manager):
@@ -97,6 +112,3 @@ class Review(models.Model):
     book = models.ForeignKey(
         Book, related_name="book_reviews", on_delete=models.CASCADE)
     objects = ReviewManager()
-
-    def __str__(self):  # usually only needed if using in admin
-        return "{} by {}".format(self.review, self.rating, self.reviewer)
