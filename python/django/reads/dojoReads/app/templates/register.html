@@ -14,66 +14,66 @@
   <div class="container-fluid">
     {% block content %}
     <div class="login_box d-flex justify-content-center p-3">
-      <div class="col-12 col-md-6">
-          <h2 class="text-center pb-5">Register</h2>
-          <form action="/register" method="POST">
-              {% csrf_token %}
-              {% if messages %}
-                  {% for message in messages %}
-                      {% if "username" in message.tags %}
-                      <p class="text-danger mt-3">{{ message }}</p>
-                      {% endif %}
-                  {% endfor %}
-              {% endif %}
-              <div class="form-group">
-                  <label for="username">Username</label>
-                  <input type="text" name="username" id="username" class="form-control">
-              </div>
-              {% if messages %}
-                  {% for message in messages %}
-                      {% if "alios" in message.tags %}
-                      <p class="text-danger mt-3">{{ message }}</p>
-                      {% endif %}
-                  {% endfor %}
-              {% endif %}
-              <div class="form-group">
-                  <label for="alios">Alios</label>
-                  <input type="text" name="alios" id="alios" class="form-control">
-              </div>
-              {% if messages %}
-                  {% for message in messages %}
-                      {% if "email" in message.tags %}
-                      <p class="text-danger mt-5">{{ message }}</p>
-                      {% endif %}
-                  {% endfor %}
-              {% endif %}
-              <div class="form-group">
-                  <label for="email">Email</label>
-                  <input type="email" name="email" id="email" class="form-control">
-              </div>
-              {% if messages %}
-                  {% for message in messages %}
-                      {% if "password" in message.tags %}
-                      <p class="text-danger mt-5">{{ message }}</p>
-                      {% endif %}
-                  {% endfor %}
-              {% endif %}
-              <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" name="password" id="password" class="form-control">
-                  <p>* Password should be at least 8 characters.</p>
-              </div>
-              <div class="form-group">
-                  <label for="confirm">Confirm Password</label>
-                  <input type="password" name="confirm" id="confirm" class="form-control">
-              </div>
-              <button class="btn btn-primary mt-3">Register</button>
-          </form>
-      
+        <div class="col-12 col-md-6">
+            <h2 class="text-center pb-5">Register</h2>
+            <form action="/register" method="POST">
+                {% csrf_token %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "username" in message.tags %}
+                        <p class="text-danger mt-3">{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" class="form-control">
+                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "alios" in message.tags %}
+                        <p class="text-danger mt-3">{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <div class="form-group">
+                    <label for="alios">Alios</label>
+                    <input type="text" name="alios" id="alios" class="form-control">
+                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "email" in message.tags %}
+                        <p class="text-danger mt-5">{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control">
+                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "password" in message.tags %}
+                        <p class="text-danger mt-5">{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                    <p>* Password should be at least 8 characters.</p>
+                </div>
+                <div class="form-group">
+                    <label for="confirm">Confirm Password</label>
+                    <input type="password" name="confirm" id="confirm" class="form-control">
+                </div>
+                <button class="btn btn-primary mt-3">Register</button>
+            </form>
+            <p class="mt-3">Already have an account? Go to <a href="/login" class="mx-3  text-info">Sign In</a></p>
+        </div>
+    </div>
     {% endblock %}
-  </div>
-</div>
-  </div>
+
   
 </div>
 </body>

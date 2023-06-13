@@ -91,7 +91,7 @@ def add_book(request):
         # print(new_review)
         return redirect(f"/books/{book.id}")
     else:
-        return render(request, "addBook.html", context={"authors": Author.objects.all()})
+        return render(request, "addBook.html", context={"authors": Author.objects.all(), "user": user})
 
 
 # # edit show
@@ -137,6 +137,7 @@ def book_detail(request, book_id):
     this_book = Book.objects.get(id=book_id)
     reviews = Review.objects.filter(book_id=this_book.id)
 
+    # ADD Review
     if request.method == "POST":
         if not user:
             messages.error(request, "Please log in first.")
@@ -149,12 +150,13 @@ def book_detail(request, book_id):
 
         review = Review.objects.create(review=request.POST["review"], rating=int(
             request.POST["rating"]), reviewer=user, book=this_book)
+
         return redirect(f"/books/{book_id}/add/review")
     else:
         context = {
             "book": this_book,
             "user": user,
-            "reviews": reviews,
+            "reviews": reviews.order_by("-created_at"),
             "count": len(reviews)
         }
 
