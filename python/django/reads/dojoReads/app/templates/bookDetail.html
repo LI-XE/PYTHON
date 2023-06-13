@@ -28,7 +28,12 @@
           <li class="border-bottom px-3 pt-3">
             <p><span class="mr-2 font-weight-bold">Rating:</span>{{review.rating}}</p>
             <p><span class="mr-2 font-weight-bold text-secondary">{{ review.reviewer.username }}</span> says:  "{{ review.review}}"</p>
-            <p class="text-right">Posted on {{ review.created_at|date:"M d, Y"}}</p>
+            <div class="d-flex justify-content-end">
+              {% if user.id == review.reviewer_id %}
+              <a href="/books/{{book.id}}/delete/{{review.id}}" class="text-dark mr-5" onclick="return confirm('Aru you sure?')">Delete</a>
+              {% endif %}
+              <p class="text-right">Posted on {{ review.created_at|date:"M d, Y"}}</p>
+          </div>
           </li>
           {% endfor %}
         </ul>
@@ -55,7 +60,6 @@
             <label for="rating" class="col-sm-2">Rating:</label>
             <div class="col-sm-10">
               <select name="rating">
-              <option value="--">--</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
