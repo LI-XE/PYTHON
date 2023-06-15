@@ -6,21 +6,28 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% load static %}
-  <link rel='stylesheet' href="{% static 'css/style.css' %}">
+  <link rel='stylesheet' href="{% static 'style.css' %}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <title>Book Detail</title>
+  <title>User Detail</title>
 </head>
-<body class="container-fluid detail">
+<body">
   {% block content %}
-  <div  class="container d-flex flex-column align-items-center px-3 pb-5 ">
-    <h1 class="mb-5 display-2">Book Info</h1>
+  <div  class="container d-flex flex-column align-items-center px-3 m-5">
+    <h1 class="my-5 display-3">User Info</h1>
     <ul class="display-4">
-      <li><span class="m-5">User Alios:</span>{{user.alios}}</li>
-      <li><span class="m-5">Name:</span>{{user.username}}</li>
-      <li><span class="m-5">Email:</span>{{book.remail}}</li>
-      <li><span class="m-5">Total Reviews:</span>{{book.reviews.length}}</li>
-      
+      <li><span class="m-5">User Alios:</span>{{one_user.alios}}</li>
+      <li><span class="m-5">Name:</span>{{one_user.username}}</li>
+      <li><span class="m-5">Email:</span>{{one_user.email}}</li>
+      <li><span class="m-5">Total Reviews:</span>{{count}}</li>
     </ul>
+    <h3>Posted Reviews on the following books:</h3>
+    <ul>
+    {% for book in book_reviews %}
+      <li>
+        <a href="/books/{{book.id}}"><h3 class="text-dark">"{{book.title}}"</h3></a>
+      </li> 
+    {% endfor %}
+  </ul>
   </div>
   {% endblock %}
 </body>

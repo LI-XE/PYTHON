@@ -15,38 +15,22 @@ def index(request):
     return render(request, "index.html", context)
 
 
-# def new(request):
-#     context = {
-#         "all_shoes": Shoe.objects.all()
-#     }
-#     return render(request, "show.html", context)
+def dashboard(request):
+    user = None if "user_id" not in request.session else User.objects.get(
+        id=request.session["user_id"])
+    
+    recent_reviews = Review.objects.order_by("-created_at")[:3]
+    latest_reviewed_books = []
+    for review in recent_reviews:
+        latest_reviewed_books.append(Book.objects.get(id = review.book_id))
 
-
-# def create(request):
-#     if "has_laces" not in request.POST:
-#         Shoe.objects.create(brand=request.POST["brand"], color=request.POST["color"],
-#                             material=request.POST["material"], has_laces=False, count=request.POST["count"])
-#     else:
-#         Shoe.objects.create(brand=request.POST["brand"], color=request.POST["color"],
-#                             material=request.POST["material"], has_laces=request.POST["has_laces"], count=request.POST["count"])
-
-#     return redirect("/new")
-
-
-# # all shows
-# def shows_page(request):
-#     user = None if 'user_id' not in request.session else User.objects.get(
-#         id=request.session['user_id'])
-
-#     context = {
-#         "all_shows": Show.objects.all(),
-#         "user": user
-#     }
-#     print(user)
-#     print(Show.objects.all().__dict__)
-#     return render(request, "shows.html", context)
-
-# # create show
+    context = {
+        "user": user,
+        "all_books": Book.objects.all(),
+        "recent_reviews": recent_reviews,
+        "latest_reviewed_books": latest_reviewed_books
+    }
+    return render(request, "home.html", context)
 
 
 def add_book(request):
@@ -85,48 +69,13 @@ def add_book(request):
         review = Review.objects.create(
             review=request.POST["review"], rating=int(request.POST["rating"]), reviewer=user, book=book)
         book.authors.add(author)
-        messages.add_message(request, messages.SUCCESS,
-                             "{book.title} has been added")
+        # messages.add_message(request, messages.SUCCESS,
+        #                      "{book.title} has been added")
         print(book.__dict__)
         # print(new_review)
         return redirect(f"/books/{book.id}")
     else:
         return render(request, "addBook.html", context={"authors": Author.objects.all(), "user": user})
-
-
-# # edit show
-# def show_edit_page(request, show_id):
-#     user = None if 'user_id' not in request.session else User.objects.get(
-#         id=request.session['user_id'])
-#     if not user:
-#         return redirect("/shows")
-
-#     show = Show.objects.get(id=show_id)
-
-#     if user.id != show.created_by_id:
-#         return redirect("/shows")
-
-#     print(f"ReleaseDate: {show.release_date}")
-#     if request.method == "POST":
-#         errors = Show.objects.validate(request.POST)
-
-#         if errors:
-#             for e in errors.values():
-#                 messages.error(request, e)
-#             return redirect(f"/shows/{show_id}/edit")
-
-#         show.title = request.POST["title"]
-#         show.network = request.POST["network"]
-#         show.release_date = request.POST["release_date"]
-#         show.description = request.POST["description"]
-#         show.save()
-#         print(show)
-#         messages.add_message(request, messages.SUCCESS, "Show updated")
-
-#         return redirect(f"/shows/{show_id}")
-
-#     else:
-#         return render(request, "updateShow.html", context={"show": show, "user": user})
 
 
 # book detail
@@ -163,21 +112,44 @@ def book_detail(request, book_id):
         return render(request, "bookDetail.html", context)
 
 
-# # delete show
-# def show_delete(request, show_id):
-#     user = None if 'user_id' not in request.session else User.objects.get(
-#         id=request.session['user_id'])
-#     if not user:
-#         return redirect("/shows")
+# delete review
+def review_delete(request, review_id, book_id):
+    user = None if 'user_id' not in request.session else User.objects.get(
+        id=request.session['user_id'])
+    if not user:
+        return redirect("/login")
 
-#     show_to_delete = Show.objects.get(id=show_id)
-#     if user.id == show_to_delete.created_by_id:
-#         show_to_delete.delete()
-#         messages.success(
-#             request,
-#             "{} by {} has been deleted".format(show_to_delete.title, show_to_delete.network))
+    review_to_delete = Review.objects.get(id=review_id)
+    if user.id == review_to_delete.reviewer_id:
+        review_to_delete.delete()
+    return redirect(f"/books/{book_id}")
 
-#     return redirect("/shows")
+
+# User Page
+def user_page(request, user_id):
+    user = None if 'user_id' not in request.session else User.objects.get(
+        id=request.session['user_id'])
+
+    if not user:
+        return redirect("/login")
+
+    one_user = User.objects.get(id=user_id)
+    reviews = Review.objects.filter(reviewer_id=one_user.id)
+    reviewed_books = []
+    for review in reviews:
+        book_reviewed = Book.objects.get(id=review.book.id)
+        if book_reviewed not in reviewed_books:
+            reviewed_books.append(book_reviewed)
+
+    context = {
+        "user": user,
+        "one_user": one_user,
+        "reviews": reviews,
+        "count": len(reviews),
+        # or userDetail.html ---  count: {{user.reviews.all|lenghth}}
+        "book_reviews": reviewed_books
+    }
+    return render(request, "userDetail.html", context)
 
 
 def register(request):
@@ -198,7 +170,7 @@ def register(request):
 
         return redirect("/books/add")
     else:
-        return render(request, "register.html")
+        return render(request, "register.html", context={"user": None})
 
 
 def login(request):
@@ -215,7 +187,7 @@ def login(request):
             return redirect("/books/add")
 
     else:
-        return render(request, "login.html")
+        return render(request, "login.html", context={"user": None})
 
 
 def logout(request):
