@@ -79,6 +79,7 @@ class AuthorManager(models.Manager):
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
+    image = models.ImageField(default="defult.png", blank=True)
     followers = models.ManyToManyField(User, related_name="followed_books")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

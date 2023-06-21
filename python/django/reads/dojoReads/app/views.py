@@ -18,11 +18,11 @@ def index(request):
 def dashboard(request):
     user = None if "user_id" not in request.session else User.objects.get(
         id=request.session["user_id"])
-    
+
     recent_reviews = Review.objects.order_by("-created_at")[:3]
     latest_reviewed_books = []
     for review in recent_reviews:
-        latest_reviewed_books.append(Book.objects.get(id = review.book_id))
+        latest_reviewed_books.append(Book.objects.get(id=review.book_id))
 
     context = {
         "user": user,
@@ -41,6 +41,7 @@ def add_book(request):
 
     authors = Author.objects.all()
 
+    # if request.method == "POST" or request.method == "FILES":
     if request.method == "POST":
         review_errors = Review.objects.validate(request.POST)
         book_errors = Book.objects.validate(request.POST)
@@ -65,7 +66,7 @@ def add_book(request):
             author = Author.objects.get(id=request.POST["author_dropdown"])
 
         book = Book.objects.create(
-            title=request.POST["title"])
+            title=request.POST["title"], image=request.FILES["image"])
         review = Review.objects.create(
             review=request.POST["review"], rating=int(request.POST["rating"]), reviewer=user, book=book)
         book.authors.add(author)

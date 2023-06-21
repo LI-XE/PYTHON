@@ -22,7 +22,7 @@
           {% endfor %}
       </ul>
   {% endif %}
-    <form action="/books/add" method="POST">
+    <form action="/books/add" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group row">
             <label for="title" class="col-sm-2">Title</label>
@@ -47,6 +47,12 @@
             <label name="author_name" class="col-sm-4">Or add a new author:</label>
             <div class="col-sm-5">
             <input type="text" name="author_name" class="form-control">
+          </div>
+          </div>
+          <div class="form-group row pl-3">
+            <label name="image" class="col-sm-4">Upload Image:</label>
+            <div class="col-sm-5">
+            <input type="file" name="image" accept="image/*">
           </div>
           </div>
         </div>
