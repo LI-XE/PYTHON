@@ -1,6 +1,7 @@
 
 from django.shortcuts import render, redirect
 from .models import User, Book, Review, Author
+from .forms import ReviewForm, ReviewModelForm
 from django.contrib import messages
 import bcrypt
 
@@ -98,17 +99,43 @@ def book_detail(request, book_id):
                 messages.error(request, e)
             return redirect(f"/books/{book_id}")
 
-        review = Review.objects.create(review=request.POST["review"], rating=int(
-            request.POST["rating"]), reviewer=user, book=this_book)
+        # /models.py
+        # review = Review.objects.create(review=request.POST["review"], rating=int(
+        #     request.POST["rating"]), reviewer=user, book=this_book)
 
-        return redirect(f"/books/{book_id}/add/review")
+        # /forms.py ReviewForm(forms.Form)
+        # review_form = ReviewForm(request.POST)
+        # print(review_form.data)
+
+        # review = Review.objects.create(review=review_form.data["review"], rating=int(
+        #     review_form.data["rating"]), reviewer=user, book=this_book)
+
+        # /forms.py ReviewModelForm(forms.ModelForm)
+        review_form = ReviewModelForm(request.POST)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.reviewer = user
+            review.book = this_book
+            review.save()
+
+            return redirect(f"/books/{book_id}/add/review")
+        else:
+            context = {
+                "book": this_book,
+                "user": user,
+                "reviews": reviews.order_by("-created_at"),
+                "count": len(reviews),
+                "review_form": review_form}
+
+        return render(request, "bookDetail.html", context)
     else:
         context = {
             "book": this_book,
             "user": user,
             "reviews": reviews.order_by("-created_at"),
-            "count": len(reviews)
-        }
+            "count": len(reviews),
+            # "review_form": ReviewForm(), # if /forms.py ReviewForm
+            "review_form": ReviewModelForm()}
 
         return render(request, "bookDetail.html", context)
 

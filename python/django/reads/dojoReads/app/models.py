@@ -56,6 +56,9 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()
 
+    def __str__(self):
+        return self.username
+
 
 class BookManager(models.Manager):
     def validate(self, form):
@@ -85,6 +88,9 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     objects = BookManager()
 
+    def __str__(self):
+        return self.title
+
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -92,6 +98,9 @@ class Author(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = AuthorManager()
+
+    def __str__(self):
+        return self.name
 
 
 class ReviewManager(models.Manager):
@@ -113,3 +122,6 @@ class Review(models.Model):
     book = models.ForeignKey(
         Book, related_name="book_reviews", on_delete=models.CASCADE)
     objects = ReviewManager()
+
+    def __str__(self):
+        return self.name
