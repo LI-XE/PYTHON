@@ -33,8 +33,8 @@
             <p><span class="mr-2 font-weight-bold">Rating:</span>{{review.rating}}</p>
             <p><a href="/users/{{review.reviewer_id}}"><span class="mr-2 font-weight-bold text-secondary">{{ review.reviewer.username }}</span></a> says:  "{{ review.review}}"</p>
             <div class="d-flex justify-content-end">
-              {% if user.id == review.reviewer_id %}
-              <a href="/books/{{book.id}}/delete/{{review.id}}" class="text-dark mr-5" onclick="return confirm('Aru you sure?')">Delete</a>
+              {% if request.user.id == review.reviewer_id %}
+              <a href="/books/{{book.id}}/delete/{{review.id}}" class="text-dark mr-5" onclick="return confirm('Are you sure?')">Delete</a>
               {% endif %}
               <p class="text-right">Posted on {{ review.created_at|date:"M d, Y"}}</p>
           </div>

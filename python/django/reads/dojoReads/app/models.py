@@ -1,63 +1,63 @@
 from django.db import models
+from django.contrib.auth.models import User
 from datetime import datetime
 import re
 import bcrypt
 
 
-class UserManager(models.Manager):
-    def register_validator(self, form):
-        errors = {}
+# class UserManager(models.Manager):
+#     def register_validator(self, form):
+#         errors = {}
 
-        if len(form["username"]) < 3:
-            errors["username"] = "Username must be at least 3 characters."
+#         if len(form["username"]) < 3:
+#             errors["username"] = "Username must be at least 3 characters."
 
-        if len(form["alios"]) < 3:
-            errors["alios"] = "Alios must be at least 3 characters."
+#         if len(form["alios"]) < 3:
+#             errors["alios"] = "Alios must be at least 3 characters."
 
-        EMAIL_REGEX = re.compile(
-            r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
-        if not EMAIL_REGEX.match(form['email']):
-            errors['email'] = "Invalid email address!"
+#         EMAIL_REGEX = re.compile(
+#             r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+#         if not EMAIL_REGEX.match(form['email']):
+#             errors['email'] = "Invalid email address!"
 
-        email_check = self.filter(email=form['email'])
-        if email_check:
-            errors['email'] = "Email already in use"
+#         email_check = self.filter(email=form['email'])
+#         if email_check:
+#             errors['email'] = "Email already in use"
 
-        if len(form['password']) < 8:
-            errors['password'] = 'Password must be at least 8 characters'
+#         if len(form['password']) < 8:
+#             errors['password'] = 'Password must be at least 8 characters'
 
-        if form['password'] != form['confirm']:
-            errors['password'] = 'Passwords do not match'
+#         if form['password'] != form['confirm']:
+#             errors['password'] = 'Passwords do not match'
 
-        return errors
+#         return errors
 
-    def login_validator(self, form):
-        errors = {}
-        existing_users = User.objects.filter(email=form["email"])
-        if len(form["email"]) == 0:
-            errors["email"] = "Email required."
-        if len(existing_users) == 0:
-            errors["does_not_exist"] = "Please enter a valid email or password."
-        if existing_users:
-            if len(form["password"]) < 8:
-                errors["password"] = "Password must be at least 8 characters."
-            elif not bcrypt.checkpw(form["password"].encode(), existing_users[0].password.encode()):
-                errors["mismatch"] = "please enter a valid email or password."
+#     def login_validator(self, form):
+#         errors = {}
+#         existing_users = User.objects.filter(email=form["email"])
+#         if len(form["email"]) == 0:
+#             errors["email"] = "Email required."
+#         if len(existing_users) == 0:
+#             errors["does_not_exist"] = "Please enter a valid email or password."
+#         if existing_users:
+#             if len(form["password"]) < 8:
+#                 errors["password"] = "Password must be at least 8 characters."
+#             elif not bcrypt.checkpw(form["password"].encode(), existing_users[0].password.encode()):
+#                 errors["mismatch"] = "please enter a valid email or password."
 
-        return errors
+#         return errors
 
 
-class User(models.Model):
-    username = models.CharField(max_length=255)
-    alios = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = UserManager()
+# class User(models.Model):
+#     username = models.CharField(max_length=255)
+#     email = models.CharField(max_length=255)
+#     password = models.CharField(max_length=255)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     objects = UserManager()
 
-    def __str__(self):
-        return self.username
+#     def __str__(self):
+#         return self.username
 
 
 class BookManager(models.Manager):
