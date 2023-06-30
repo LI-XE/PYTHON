@@ -19,7 +19,7 @@
         {% for review in recent_reviews %}
         <li class="border-bottom px-3 pt-3">
           <h3><a href="/books/{{review.book.id}}">"{{review.book.title}}"</a></h3>
-          <p><span class="mx-3 font-weight-bold">Rating:</span>{{review.rating}}</p>
+          {% include "bookRating.html" with rating=review.rating %}
           <p><a href="/users/{{review.reviewer_id}}"><span class="mx-3 font-weight-bold text-secondary">{{ review.reviewer.username }}</span></a> says:  "{{ review.review}}"</p>
           <p class="ml-3">Posted on {{ review.created_at|date:"M d, Y"}}</p>
         </li>

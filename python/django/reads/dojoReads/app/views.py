@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-
 def index(request):
     # user = None if "user_id" not in request.session else User.objects.get(
     #     id=request.session["user_id"])
@@ -93,6 +92,13 @@ def book_detail(request, book_id):
 
     this_book = Book.objects.get(id=book_id)
     reviews = Review.objects.filter(book_id=this_book.id)
+    book_ratings_sum = 0
+    for review in reviews:
+        book_rating = review.rating
+        book_ratings_sum += book_rating
+    review_count = len(reviews)
+    book_ratings = (book_ratings_sum / review_count)
+    print(book_ratings)
 
     # ADD Review
     if request.method == "POST":
@@ -122,6 +128,8 @@ def book_detail(request, book_id):
             review = review_form.save(commit=False)
             review.reviewer = request.user
             review.book = this_book
+            book_ratings_sum += review.rating
+            book_rating = book_ratings_sum / (review_count +1)
             review.save()
 
             return redirect(f"/books/{book_id}/add/review")
@@ -131,15 +139,18 @@ def book_detail(request, book_id):
                 "user": request.user,
                 "reviews": reviews.order_by("-created_at"),
                 "count": len(reviews),
+                "book_ratings": book_ratings,
                 "review_form": review_form}
 
         return render(request, "bookDetail.html", context)
     else:
+
         context = {
             "book": this_book,
             "user": request.user,
             "reviews": reviews.order_by("-created_at"),
             "count": len(reviews),
+            "book_ratings": book_ratings,
             # "review_form": ReviewForm(), # if /forms.py ReviewForm
             "review_form": ReviewModelForm()}
 

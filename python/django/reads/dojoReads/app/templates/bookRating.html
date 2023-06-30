@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <link rel='stylesheet' href="{% static 'style.css' %}">
+  <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  
+  <title>rating</title>
+</head>
+<body>
+  <div class="rating mb-2">
+    <p class="d-inline font-weight-bold m-3">Ratings: </p>
+    <span>
+          {% if rating >= 1 %}
+          <i class="fa-solid fa-star text-warning"></i>
+          {% elif rating >= 0.5 %}
+            <i class="fa-solid fa-star-half-stroke text-warning"></i>
+          {% else %} 
+          <i class="fa-regular fa-star text-warning"></i>
+          {% endif %}
+        
+      
+    </span>
+    <span>
+      {% if rating >= 2 %}
+          <i class="fa-solid fa-star text-warning"></i>
+          {% elif rating >= 1.5 %}
+            <i class="fa-solid fa-star-half-stroke text-warning"></i>
+          {% else %} 
+          <i class="fa-regular fa-star text-warning"></i>
+          {% endif %}
+    </span>
+    <span>
+      {% if rating >= 3 %}
+          <i class="fa-solid fa-star text-warning"></i>
+          {% elif rating >= 2.5 %}
+            <i class="fa-solid fa-star-half-stroke text-warning"></i>
+          {% else %} 
+          <i class="fa-regular fa-star text-warning"></i>
+          {% endif %}
+    </span>
+    <span>
+      {% if rating >= 4 %}
+          <i class="fa-solid fa-star text-warning"></i>
+          {% elif rating >= 3.5 %}
+            <i class="fa-solid fa-star-half-stroke text-warning"></i>
+          {% else %} 
+          <i class="fa-regular fa-star text-warning"></i>
+          {% endif %}
+    </span>
+    <span>
+      {% if rating >= 5 %}
+          <i class="fa-solid fa-star text-warning"></i>
+          {% elif rating >= 4.5 %}
+            <i class="fa-solid fa-star-half-stroke text-warning"></i>
+          {% else %} 
+          <i class="fa-regular fa-star text-warning"></i>
+          {% endif %}
+    </span>
+  </div>
+</body>
+</html>
